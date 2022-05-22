@@ -31,9 +31,8 @@ class CommentContraller extends Controller
             ->get()
             ->toArray();
 
-        $returnComment['commentsCurrentList'] = ++$validated['commentsCurrentList'];
-
         return $returnComment;
+
     }
 
     /**

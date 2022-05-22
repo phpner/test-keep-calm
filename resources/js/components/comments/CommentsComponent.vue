@@ -149,7 +149,7 @@ export default {
                 "postId": this.postId,
                 "commentsCurrentList": this.commentsCurrentList
             }).then((response) => {
-                this.commentsCurrentList = response.data.commentsCurrentList
+                this.commentsCurrentList++
                 this.commentsData.push(...response.data.comments);
             }).then(() => {
                 document.querySelector('.container .card-body .btn-secondary').scrollIntoView();
