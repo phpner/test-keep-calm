@@ -21,7 +21,7 @@
                             <comments-component
                                 :comments-count="{{ $page->comments_count }}"
                                 :comments-pre="{{ $page->preComment }}"
-                                :comments="{{ $page->comments }}"
+                                :comments-data="{{ $page->comments }}"
                                 :post-id="{{ $page->id }}"
                                 :user-id="{{ auth()->user()->id }}">
                             </comments-component>
