@@ -5,7 +5,10 @@
 composer install
 npm install
 npm run dev
-php artisan migrate:fresh --seed
+
+Настроить БД.
+
+php artisan migrate --seed
 php artisan storage:link
 
 Вход

@@ -96,8 +96,8 @@ export default {
     data: function () {
         return {
             massege: "",
+            commentsData: this.comments,
             commentsCurrentList: 1,
-            commentsData: [],
             sortReverse: false,
             btnMoreShow: true,
             btnLoading: {
@@ -107,7 +107,6 @@ export default {
         }
     },
     mounted() {
-        this.commentsData = this.comments;
         this.checkVisibleBtnMore();
     },
     methods: {
@@ -149,7 +148,7 @@ export default {
                 "postId": this.postId,
                 "commentsCurrentList": this.commentsCurrentList
             }).then((response) => {
-                this.commentsCurrentList = response.data.commentsCurrentList
+                this.commentsCurrentList++
                 this.commentsData.push(...response.data.comments);
             }).then(() => {
                 document.querySelector('.container .card-body .btn-secondary').scrollIntoView();

@@ -20,6 +20,16 @@ class Page extends Model
     ];
 
     /**
+     * status of page.
+     */
+    const STATUS = [
+        'open' => 'open',
+        'close' => 'close',
+        'moderation' => 'moderation',
+        'deleted' => 'deleted',
+    ];
+
+    /**
      * @return HasMany
      */
     public function comments(): HasMany
