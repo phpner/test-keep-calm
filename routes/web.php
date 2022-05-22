@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +14,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth')->group(function () {
+
+    // Home controller
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])
+        ->name('home');
+
+    // get one page
+    Route::get('/page/{id}', [App\Http\Controllers\PageController::class, 'getPage'])
+        ->name('getPage');
+
+    //pagination comment by load more
+    Route::post('/comments/load-more-comments', [App\Http\Controllers\CommentContraller::class, 'CommentsLoadMore'])
+        ->name('loadMoreComments');
+
+    //add new comment
+    Route::post('/comments/add', [App\Http\Controllers\CommentContraller::class, 'CommentsAdd'])
+        ->name('CommentsAdd');
+
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
