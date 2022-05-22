@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $pages = Page::where('status', 'open')->get();
+        $pages = Page::where('status', Page::STATUS['open'])->get();
 
         return view('home', ['pages' => $pages]);
     }
