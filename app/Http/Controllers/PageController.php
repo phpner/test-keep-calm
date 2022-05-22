@@ -16,7 +16,7 @@ class PageController extends Controller
      */
     public function getPage(int $id)
     {
-        $page = Page::where('status', 'open')
+        $page = Page::where('status', Page::STATUS['open'])
             ->withCount(['comments' => function ($query) {
                 $query->where('status', Comment::STATUS['open']);
             }])
