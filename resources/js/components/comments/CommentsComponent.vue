@@ -15,8 +15,10 @@
 
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <button class="btn btn-success m-2" @click="sendComment"><span class="m-2">send</span> <i
-                    class="bi bi-send"></i></button>
+                <button class="btn btn-success m-2" @click="sendComment" :disabled="btnLoading.sentMsg">
+                    <span class="m-2">send</span>
+                    <i class="bi bi-send"></i>
+                </button>
             </div>
         </div>
         <!-- textarea end -->
@@ -72,8 +74,8 @@
                 </div>
             </div>
             <!--show more -->
-            <div class="col-12 mt-2 text-center" @click="pagination" v-show="btnMore">
-                <button type="button" :disabled="btnMoreLoading" class="btn btn-secondary">Load more</button>
+            <div class="col-12 mt-2 text-center" @click="pagination" v-show="btnMoreShow">
+                <button type="button" :disabled="btnLoading.loadMore" class="btn btn-secondary">Load more</button>
             </div>
             <!--show more end -->
         </div>
@@ -96,17 +98,17 @@ export default {
             massege: "",
             commentsCurrentList: 1,
             commentsData: [],
-            btnMore: true,
-            btnMoreLoading: false,
             sortReverse: false,
+            btnMoreShow: true,
+            btnLoading: {
+                loadMore: false,
+                sentMsg: false
+            }
         }
     },
     mounted() {
         this.commentsData = this.comments;
-
-        if (this.commentsCount <= this.commentsData.length) {
-            this.btnMore = false;
-        }
+        this.checkVisibleBtnMore();
     },
     methods: {
         sendComment: function () {
@@ -116,6 +118,11 @@ export default {
                 return false;
             }
 
+            if (this.btnLoading.sentMsg) {
+                return false;
+            }
+
+            this.btnLoading.sentMsg = true;
             axios.post("/comments/add", {
                 "postId": this.postId,
                 "comment": this.massege,
@@ -123,15 +130,19 @@ export default {
             }).then((response) => {
                 this.commentsData.unshift(response.data);
                 this.massege = '';
-            }).then(() => this.sortByCommentDate(false));
+                this.btnLoading.sentMsg= false;
+            }).then(() =>
+                this.sortByCommentDate(false)
+            );
 
         },
         pagination: function () {
 
-            if (this.btnMoreLoading){
+            if (this.btnLoading.loadMore) {
                 return false;
             }
-            this.btnMoreLoading = true;
+
+            this.btnLoading.loadMore = true;
 
             axios.post("/comments/load-more-comments", {
                 "commentsPre": this.commentsPre,
@@ -142,12 +153,9 @@ export default {
                 this.commentsData.push(...response.data.comments);
             }).then(() => {
                 document.querySelector('.container .card-body .btn-secondary').scrollIntoView();
-                if (this.commentsCount <= this.commentsData.length) {
-                    this.btnMore = false;
-                }
-
+                this.checkVisibleBtnMore();
                 this.sortByCommentDate(false)
-                this.btnMoreLoading =  false;
+                this.btnLoading.loadMore = false;
             });
         },
         sortByCommentDate: function (rev) {
@@ -159,8 +167,12 @@ export default {
             });
 
             this.sortReverse = rev;
-        }
-
+        },
+        checkVisibleBtnMore: function () {
+            if (this.commentsCount <= this.commentsData.length) {
+                this.btnMoreShow = false;
+            }
+        },
     }
 }
 </script>
